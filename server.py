@@ -1,33 +1,33 @@
 from flask import Flask, request, jsonify
-from transformers import pipeline
+import requests
+import os
 
 app = Flask(__name__)
 
-# Ladataan suomenkielinen malli
-malli = "TurkuNLP/gpt3-finnish-small"
-generaattori = pipeline("text-generation", model=malli, tokenizer=malli)
+HF_API_URL = "https://api-inference.huggingface.co/models/TurkuNLP/gpt3-finnish-small"
+HF_TOKEN = os.environ.get("HF_TOKEN")  # Lisää tämä Renderin ympäristömuuttujiin
 
 @app.route("/api/generate", methods=["POST"])
 def generate():
     data = request.json
     prompt = data.get("prompt", "")
 
-    vastaus = generaattori(
-        prompt,
-        max_length=80,
-        num_return_sequences=1,
-        do_sample=True,
-        top_p=0.95,
-        temperature=0.8,
-    )
+    headers = {"Authorization": f"Bearer {HF_TOKEN}"}
+    payload = {"inputs": prompt}
 
-    return jsonify({"response": vastaus[0]["generated_text"]})
+    response = requests.post(HF_API_URL, headers=headers, json=payload)
+
+    try:
+        result = response.json()
+    except:
+        return jsonify({"error": "Invalid response from HuggingFace"}), 500
+
+    return jsonify(result)
 
 @app.route("/")
 def home():
-    return "Tekoälypalvelin toimii!"
+    return "Tekoälypalvelin toimii HuggingFace API:n kautta!"
 
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
