@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import requests
 import os
 
@@ -26,8 +26,10 @@ def generate():
 
 @app.route("/")
 def home():
-    return "Tekoälypalvelin toimii HuggingFace API:n kautta!"
+    return send_from_directory(".", "index.html")
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
