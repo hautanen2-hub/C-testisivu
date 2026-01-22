@@ -5,7 +5,7 @@ import os
 app = Flask(__name__)
 
 HF_API_URL = "https://router.huggingface.co/models/TurkuNLP/gpt3-finnish-small"
-HF_TOKEN = os.environ.get("HF_TOKEN")  # Lisää tämä Renderin ympäristömuuttujiin
+HF_TOKEN = os.environ.get("HF_TOKEN")
 
 @app.route("/api/generate", methods=["POST"])
 def generate():
@@ -17,12 +17,22 @@ def generate():
 
     response = requests.post(HF_API_URL, headers=headers, json=payload)
 
+    # HuggingFace voi palauttaa dictin TAI listan
     try:
         result = response.json()
     except:
-        return jsonify({"error": "Invalid response from HuggingFace"}), 500
+        return jsonify({"error": "HuggingFace returned non-JSON"}), 500
 
-    return jsonify(result)
+    # Jos vastaus on lista (normaali generointi)
+    if isinstance(result, list):
+        return jsonify({"response": result})
+
+    # Jos vastaus on dict (status/error)
+    if isinstance(result, dict):
+        return jsonify(result)
+
+    # Jos jotain muuta
+    return jsonify({"error": "Unexpected response format"}), 500
 
 @app.route("/")
 def home():
