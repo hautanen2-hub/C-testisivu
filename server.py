@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-HF_API_URL = "https://api-inference.huggingface.co/models/TurkuNLP/gpt3-finnish-small"
+HF_API_URL = "https://router.huggingface.co/models/TurkuNLP/gpt3-finnish-small"
 HF_TOKEN = os.environ.get("HF_TOKEN")  # Lisää tämä Renderin ympäristömuuttujiin
 
 @app.route("/api/generate", methods=["POST"])
@@ -28,8 +28,6 @@ def generate():
 def home():
     return send_from_directory(".", "index.html")
 
-
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
