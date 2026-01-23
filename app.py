@@ -5,7 +5,7 @@ import requests
 app = Flask(__name__)
 
 HF_TOKEN = os.getenv("HF_TOKEN")
-MODEL_URL = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct"
+MODEL_URL = "https://api-inference.huggingface.co/models/google/flan-t5-small"
 
 @app.route("/api", methods=["POST"])
 def generate():
@@ -19,8 +19,8 @@ def generate():
 
     try:
         return jsonify(r.json())
-    except:
-        return jsonify({"error": "HuggingFace returned non-JSON"}), 500
+    except Exception as e:
+        return jsonify({"error": "HuggingFace returned non-JSON", "details": str(e)}), 500
 
 @app.route("/")
 def home():
