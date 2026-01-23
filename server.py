@@ -7,7 +7,7 @@ app = Flask(__name__)
 # Haetaan HuggingFace token Renderin ympäristömuuttujista
 HF_TOKEN = os.getenv("HF_TOKEN")
 
-# Käytetään toimivaa mallia (flan-t5-base toimii 100 % varmasti)
+# Käytetään toimivaa mallia (flan-t5-base toimii varmasti)
 MODEL_URL = "https://api-inference.huggingface.co/models/google/flan-t5-base"
 
 @app.route("/", methods=["GET"])
@@ -16,14 +16,12 @@ def home():
 
 @app.route("/api", methods=["POST"])
 def generate():
-    # Luetaan JSON-data
     data = request.get_json(silent=True)
     if not data or "prompt" not in data:
         return jsonify({"error": "Missing 'prompt' in JSON"}), 400
 
     prompt = data["prompt"]
 
-    # HuggingFace API -kutsu
     headers = {"Authorization": f"Bearer {HF_TOKEN}"}
     payload = {"inputs": prompt}
 
@@ -32,7 +30,6 @@ def generate():
     except Exception as e:
         return jsonify({"error": "Request to HuggingFace failed", "details": str(e)}), 500
 
-    # Yritetään tulkita JSON
     try:
         return jsonify(response.json())
     except Exception:
