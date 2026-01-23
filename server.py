@@ -4,11 +4,10 @@ import requests
 
 app = Flask(__name__)
 
-# Haetaan HuggingFace token Renderin ympäristömuuttujista
 HF_TOKEN = os.getenv("HF_TOKEN")
 
-# Käytetään toimivaa mallia (flan-t5-base toimii varmasti)
-MODEL_URL = "https://api-inference.huggingface.co/models/google/flan-t5-base"
+# UUSI OIKEA OSOITE
+MODEL_URL = "https://router.huggingface.co/hf-inference/models/google/flan-t5-base"
 
 @app.route("/", methods=["GET"])
 def home():
@@ -40,5 +39,4 @@ def generate():
 
 
 if __name__ == "__main__":
-    # Render tarvitsee tämän
     app.run(host="0.0.0.0", port=10000)
