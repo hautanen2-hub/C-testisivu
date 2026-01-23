@@ -5,7 +5,7 @@ import requests
 app = Flask(__name__)
 
 HF_TOKEN = os.getenv("HF_TOKEN")
-MODEL_URL = "https://api-inference.huggingface.co/models/google/flan-t5-small"
+MODEL_URL = "https://api-inference.huggingface.co/models/google/flan-t5-base"
 
 @app.route("/api", methods=["POST"])
 def generate():
@@ -25,3 +25,4 @@ def generate():
 @app.route("/")
 def home():
     return "API toimii!"
+
