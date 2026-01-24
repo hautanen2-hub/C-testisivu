@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import os
 import requests
+API_URL = "https://api-inference.huggingface.co/models/Jkh82/my_model"
 
 app = Flask(__name__)
 
@@ -40,3 +41,4 @@ def generate():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
