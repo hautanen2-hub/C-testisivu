@@ -8,7 +8,7 @@ app = Flask(__name__)
 HF_TOKEN = os.getenv("HF_TOKEN")
 
 # UUSI OIKEA OSOITE
-MODEL_URL = "https://router.huggingface.co/hf-inference/models/google/flan-t5-base"
+
 
 @app.route("/", methods=["GET"])
 def home():
@@ -41,5 +41,6 @@ def generate():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 
 
